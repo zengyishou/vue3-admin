@@ -2,8 +2,13 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const publicRoutes = [
   {
+    path: '/',
+    name: 'Home',
+    redirect: '/login',
+  },
+  {
     path: '/login',
-    name: 'login',
+    name: 'Login',
     component: () => import('@/views/login/Index.vue'),
   },
 ]

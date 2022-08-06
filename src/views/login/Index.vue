@@ -1,17 +1,37 @@
 <script setup>
+import { validatePassword } from './rules'
+
+const loginFormRef = ref(null)
 const loginForm = reactive({ username: '', password: '' })
+
+const rules = reactive({
+  username: { required: true, trigger: 'blur', message: '用户名不能为空' },
+  password: { required: true, trigger: 'blur', validator: validatePassword() },
+})
+
+const submitLogin = (formEl) => {
+  formEl.validate((valid) => {
+    if (valid) {
+      Console.log('submit')
+    }
+    else {
+      Console.log('error submit')
+      return false
+    }
+  })
+}
 </script>
 
 <template>
   <div class="login">
     <div class="login-containe">
       <img src="@/assets/images/login-form-bg.png" class="login-bg">
-      <el-form class="login-form" label-position="top">
+      <el-form ref="loginFormRef" class="login-form" label-position="top" :rules="rules" :model="loginForm">
         <h1 class="title">
           用户登录
         </h1>
         <div class="containe">
-          <el-form-item label="账号">
+          <el-form-item label="账号" prop="username">
             <el-input
               v-model="loginForm.username"
               type="text"
@@ -22,7 +42,7 @@ const loginForm = reactive({ username: '', password: '' })
               </template>
             </el-input>
           </el-form-item>
-          <el-form-item label="密码">
+          <el-form-item label="密码" prop="password">
             <el-input
               v-model="loginForm.password"
               type="password"
@@ -35,7 +55,7 @@ const loginForm = reactive({ username: '', password: '' })
             </el-input>
           </el-form-item>
           <el-form-item>
-            <el-button size="large" type="primary" style="width:100%">
+            <el-button size="large" type="primary" style="width:100%" @click="submitLogin(loginFormRef)">
               登录
             </el-button>
           </el-form-item>
