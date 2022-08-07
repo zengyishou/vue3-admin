@@ -1,6 +1,7 @@
 <script setup>
 import { validatePassword } from './rules'
 import { useUserStore } from '@/stores/user'
+import router from '@/router/index'
 
 const loginFormRef = ref(null)
 const loginForm = reactive({ username: '', password: '' })
@@ -20,7 +21,7 @@ const submitLogin = () => {
     useUserStore().login(loginForm.username, loginForm.password)
       .then((_data) => {
         submitLoginLoading.value = false
-        // TODO：登录成功操作
+        router.push('/')
       })
       .catch((_error) => {
         submitLoginLoading.value = false

@@ -5,7 +5,7 @@ const publicRoutes = [
   {
     path: '/',
     name: 'Home',
-    redirect: '/login',
+    component: () => import('@/views/layout/Index.vue'),
   },
   {
     path: '/login',
