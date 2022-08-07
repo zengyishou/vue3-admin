@@ -32,7 +32,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: '',
+        target: 'https://console-mock.apipost.cn/app/mock/project/219ee2e5-5e0c-4d5f-b905-0e5f127c6770',
         changeOrigin: true,
         secure: true,
       },

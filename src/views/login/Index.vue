@@ -1,23 +1,31 @@
 <script setup>
 import { validatePassword } from './rules'
+import { useUserStore } from '@/stores/user'
 
 const loginFormRef = ref(null)
 const loginForm = reactive({ username: '', password: '' })
+const submitLoginLoading = ref(false)
 
 const rules = reactive({
-  username: { required: true, trigger: 'blur', message: '用户名不能为空' },
+  username: { required: true, trigger: 'blur', message: '账号不能为空' },
   password: { required: true, trigger: 'blur', validator: validatePassword() },
 })
 
-const submitLogin = (formEl) => {
-  formEl.validate((valid) => {
-    if (valid) {
-      Console.log('submit')
-    }
-    else {
-      Console.log('error submit')
+const submitLogin = () => {
+  loginFormRef.value.validate((valid) => {
+    if (!valid)
       return false
-    }
+
+    submitLoginLoading.value = true
+    useUserStore().login(loginForm.username, loginForm.password)
+      .then((_data) => {
+        submitLoginLoading.value = false
+        // TODO：登录成功操作
+      })
+      .catch((_error) => {
+        submitLoginLoading.value = false
+        // TODO：登录失败操作
+      })
   })
 }
 </script>
@@ -55,7 +63,7 @@ const submitLogin = (formEl) => {
             </el-input>
           </el-form-item>
           <el-form-item>
-            <el-button size="large" type="primary" style="width:100%" @click="submitLogin(loginFormRef)">
+            <el-button size="large" type="primary" style="width:100%" :loading="submitLoginLoading" @click="submitLogin">
               登录
             </el-button>
           </el-form-item>
